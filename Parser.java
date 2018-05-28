@@ -116,21 +116,27 @@ public class Parser {
 	public static void cac_hang() {
 		if(isID()) {
 			nextToken();
-			if(accept("=")) {
-				nextToken();
-			}
-			else baoLoi("Thieu dau =");
-			if(isNumb()) {
-				nextToken();
-			}
-			else baoLoi("Yeu cau nhap so");
-			if(accept(";")) {
-				nextToken();
-			}
-			else baoLoi("Thieu ;");
+		}
+		else baoLoi("Thieu id cho hang");
+		if(accept("=")) {
+			nextToken();
+		}
+		else baoLoi("Thieu dau =");
+		if(isNumb()) {
+			nextToken();
+		}
+		else baoLoi("Yeu cau nhap so");
+		if(accept(";")) {
+			nextToken();
+		}
+		else baoLoi("Thieu ;");
+		them_hang();
+	}
+	
+	public static void them_hang() {
+		if(isID()) {
 			cac_hang();
 		}
-		
 	}
 	
 	public static void kbkieu() {
@@ -144,15 +150,22 @@ public class Parser {
 	public static void cac_kieu() {
 		if(isID()) {
 			nextToken();
-			if(accept("=")) {
-				nextToken();
-			}
-			else baoLoi("Thieu =");
-			kieu();
-			if(accept(";")) {
-				nextToken();
-			}
-			else baoLoi("Thieu ;");
+		}
+		else baoLoi("Thieu Id chi kieu");
+		if(accept("=")) {
+			nextToken();
+		}
+		else baoLoi("Thieu =");
+		kieu();
+		if(accept(";")) {
+			nextToken();
+		}
+		else baoLoi("Thieu ;");
+		them_kieu();
+	}
+	
+	public static void them_kieu() {
+		if(isID()) {
 			cac_kieu();
 		}
 	}
@@ -177,14 +190,22 @@ public class Parser {
 	public static void cac_bien() {
 		if(isID()) {
 			nextToken();
-			if(accept(":")) {
-				nextToken();
-			}
-			else baoLoi("Thieu :");
-			kieu();
-			if(accept(";")) {
-				nextToken();
-			}
+		}
+		else baoLoi("Thieu id cho bien");
+		if(accept(":")) {
+			nextToken();
+		}
+		else baoLoi("Thieu :");
+		kieu();
+		if(accept(";")) {
+			nextToken();
+		}
+		else baoLoi("Thieu ;");
+		them_bien();
+	}
+	
+	public static void them_bien() {
+		if(isID()) {
 			cac_bien();
 		}
 	}
@@ -227,14 +248,6 @@ public class Parser {
 	}
 	
 	public static void ds_thamso() {
-		// first cua <thamso> la ID nen kiem tra xem co vao dc <thamso> hay ko
-		if(isID()) {
-			thamso();
-			op_thamso();
-		}
-	}
-	
-	public static void thamso() {
 		if(isID()) {
 			nextToken();
 			if(accept(":")) {
@@ -244,14 +257,27 @@ public class Parser {
 			if(isBasicType()) {
 				nextToken();
 			}
-			else baoLoi("Thieu type");
+			else baoLoi("Thieu kieu");
+			op_thamso();
 		}
-		else baoLoi("Thieu id");
 	}
+	
 	public static void op_thamso() {
 		if(accept(",")) {
 			nextToken();
-			ds_thamso();
+			if(isID()) {
+				nextToken();
+			}
+			else baoLoi("Thieu id");
+			if(accept(":")) {
+				nextToken();
+			}
+			else baoLoi("Thieu :");
+			if(isBasicType()) {
+				nextToken();
+			}
+			else baoLoi("Thieu kieu");
+			op_thamso();
 		}
 	}
 	
@@ -374,7 +400,8 @@ public class Parser {
 	public static void m_exprs() {
 		if(accept(",")) {
 			nextToken();
-			exprs();
+			expr();
+			m_exprs();
 		}
 	}
 	public static void expr() {
