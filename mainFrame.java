@@ -150,7 +150,7 @@ public class mainFrame extends JFrame {
 				forTok = textArea.getText();
 				System.out.println(forTok);
 				new Parser(forTok);
-				Parser.tokenizer.display();
+//				Parser.tokenizer.display();
 				Parser.nextToken();
 				Parser.chuongtrinh();
 

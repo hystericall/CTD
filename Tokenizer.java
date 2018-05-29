@@ -12,7 +12,7 @@ public class Tokenizer {
 
 	// Returns 'true' if the character is a DELIMITER.
 	public boolean isDelimiter(char ch) {
-		if (ch=='\"'|| ch == '\f' || ch == '\n' || ch == '\r' || ch == '\t' || ch == ' ' || ch == '+' || ch == '-' || ch == '*'
+		if (ch=='\"'|| ch == '\f' || ch == '\r' || ch == '\t' || ch == ' ' || ch == '+' || ch == '-' || ch == '*'
 				|| ch == '/' || ch == ',' || ch == ';' || ch == '>' || ch == '<' || ch == '=' || ch == '(' || ch == ')'
 				|| ch == '[' || ch == ']' || ch == '{' || ch == '}' || ch == '%' || ch == '!' || ch == ':')
 			return true;
@@ -115,19 +115,21 @@ public class Tokenizer {
 	public boolean isRealNumber(String s) {
 		char[] str = s.toCharArray();
 		int i, len = str.length;
-		boolean hasDecimal = false;
+		boolean pointused = false;
 
 		if (len == 0)
-			return (false);
+			return false;
 		for (i = 0; i < len; i++) {
 			if (str[i] != '0' && str[i] != '1' && str[i] != '2' && str[i] != '3' && str[i] != '4' && str[i] != '5'
 					&& str[i] != '6' && str[i] != '7' && str[i] != '8' && str[i] != '9' && str[i] != '.'
 					|| (str[i] == '-' && i > 0))
-				return (false);
+				return false;
 			if (str[i] == '.')
-				hasDecimal = true;
+				if(!pointused) pointused = true;
+				else return false;
+				
 		}
-		return hasDecimal;
+		return true;
 	}
 
 	public boolean isStringLiteral(String str) {
@@ -143,18 +145,18 @@ public class Tokenizer {
 
 		int i = 1;
 		for (String sub : s) {
-			// String[] subarr = sub.split("\\s+");
+			// String[] subarr = sub.split("\\+");
 
 			// foreach substrings in input "s"
 			// for (String str : subarr) {
+			sub = sub.trim();
+			System.out.println(sub);
 			char[] c = sub.toCharArray();
 			int len = c.length;
 			int left = 0, right = 0;
 
-			while (right < len) {
-				//System.out.println(c[right] + "  " +right);
-				// checking type of delimiter
-				if (isDelimiter(c[right]) && left == right) {
+			while (right <= len) {
+				if (right<len && isDelimiter(c[right]) && left == right) {
 					//System.out.println("check");
 					if(c[right] == '\"') {
 						right++;
@@ -164,7 +166,6 @@ public class Tokenizer {
 							else {
 								String str = sub.substring(left+1,right);
 								if(isStringLiteral(str)) {
-									//System.out.println("hello2");
 									tokenData.add(new Token(str,TokenType.STRING_LITERAL, i));
 									left=right;
 									break;
@@ -185,7 +186,7 @@ public class Tokenizer {
 					}
 					
 					else if (right + 1 < len && isSeparator(c[right + 1])) {
-						//System.out.print(c[right] + "as " + right);
+						//System.out.print(c[right] + "as " + i);
 						if (isOperator(c[right], c[right + 1])) {
 							tokenData.add(new Token(String.valueOf(c[right]) + String.valueOf(c[right + 1]),
 									TokenType.TOANTU, i));
@@ -223,9 +224,10 @@ public class Tokenizer {
 					left = right;
 				}
 
-				else if (isDelimiter(c[right]) && left != right || (right == len - 1 && left != right)) {
+				else if (right < len && isDelimiter(c[right]) && left != right || (right == len && left != right)) {
 					String subStr = sub.substring(left, right);
-
+					if(right == len) right ++;
+					System.out.println("sub "+subStr);
 					if (isKeyword(subStr))
 						tokenData.add(new Token(subStr, TokenType.TUKHOA, i));
 					// System.out.println(subStr+" is a keyword");
@@ -247,15 +249,16 @@ public class Tokenizer {
 
 					// System.out.println(subStr+" is not a valid identifier");
 					else if (!validIdentifier(subStr))
-						tokenData.add(new Token(subStr, TokenType.ID_ERROR, i));
+						tokenData.add(new Token(subStr, TokenType.TOKEN_ERROR, i));
 
 					// taking to the next part <part><delimiter><part>
 					left = right;
 
 				}
 				
-				if (right<len && isDelimiter(c[right]) == false)
+				if (right<len && isDelimiter(c[right]) == false) {
 					right++;
+				}
 			}
 			// }
 			i++;
@@ -273,12 +276,13 @@ public class Tokenizer {
 		}
 	}
 
-	public static void main(String args[]) {
-		String input = "method<==, main \"requires  >= > <\" = ++ += + - "
-				+ "blyat(7*2) returns void >\n" + "print wallao ";
-		System.out.println(input +"\n");
-		Tokenizer tokenizer = new Tokenizer(input);
-		tokenizer.parse();
-		tokenizer.display();
-	}
+//	public static void main(String args[]) {
+//		String input = 
+//				"				a = 5\r\n" + 
+//				".5	5.5";
+//		System.out.println(input +"\n");
+//		Tokenizer tokenizer = new Tokenizer(input);
+//		tokenizer.parse();
+//		tokenizer.display();
+//	}
 }

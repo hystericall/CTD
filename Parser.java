@@ -447,15 +447,15 @@ public class Parser {
 		}
 		else baoLoi("Thieu factor");
 	}
-	public static void main(String[] args) {
-		String input = "chuongtrinh firsttest \n batdau neu (a == 6.00) a = \"buison\" ketthuc ketthuc }" ;
-		new Parser(input);
-		Parser.tokenizer.display();
-		nextToken();
-		chuongtrinh();
-		if(Parser.cuPhap == true) {
-			System.out.println("Dung cu phap");
-		}
-	}
+//	public static void main(String[] args) {
+//		String input = "chuongtrinh firsttest \n batdau neu (a == 6.00) a = \"buison\" ketthuc ketthuc }" ;
+//		new Parser(input);
+//		Parser.tokenizer.display();
+//		nextToken();
+//		chuongtrinh();
+//		if(Parser.cuPhap == true) {
+//			System.out.println("Dung cu phap");
+//		}
+//	}
 
 }

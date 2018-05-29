@@ -11,7 +11,7 @@ public enum TokenType {
 	TUKHOA,
 	
 	/** Khác vd &^%$ các kiểu NOT YET**/
-	ID_ERROR,
+	TOKEN_ERROR,
 	
 	/** Các từ tố so sánh > | >= | < | <= | == --- DONE*/
 	SOSANH,
